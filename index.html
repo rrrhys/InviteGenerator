@@ -1,0 +1,171 @@
+<html>
+	<head>
+		<title>Welcome to nginx!</title>
+		<style>
+		/*Magic Number 4.92*/
+		.apply_cutline .cutline{
+		position: absolute;
+		height: 14.76px;
+		width: 14.76px;
+		}
+		.apply_cutline .l {
+		left: -14.76px;
+		border-right: 1px solid #000;
+		}
+		.apply_cutline .t {
+		top: -14.76px;
+		border-bottom: 1px solid #000;
+		}
+		.apply_cutline .r {
+		right: -14.76px;
+		border-left: 1px solid #000;
+		}
+		.apply_cutline .b {
+		bottom: -14.76px;
+		border-top: 1px solid #000;
+		}
+		.canvas {
+		padding: 0px; 
+		position: relative;
+		background-color: #ccc;
+		}
+		.apply_cutline {
+		margin: 14.76px;
+		}
+		</style>
+	</head>
+<body bgcolor="white" text="black" style="padding: 0px; margin: 0px;">
+	<div style="height: 492px; width: 738px;" class="canvas apply_cutline" id="canvas0">
+		<div class="inner_canvas"></div>
+		<div class="cutline t l"></div>
+		<div class="cutline b l"></div>
+		<div class="cutline t r"></div>
+		<div class="cutline b r"></div>
+	</div>
+
+<div id="additional_css"></div>
+	<script type="text/javascript" src="http://provisioning.devshopous.dev/scripts/jquery-1.4.2.js"></script>
+
+	<script type="text/javascript">
+control_count = 0;
+canvas_count = 0;
+function template_element(name, innerHTML,CSS_key_pairs){
+this.name = name;
+this.innerHTML = innerHTML;
+this.CSS_key_pairs = CSS_key_pairs;
+}
+function populate_inner_canvas(	template_elements,
+																personalised_elements,
+																sheet_personalisations,
+																css_additions){
+
+	$("#additional_css").append(css_additions)
+	innerhtml = $("#additional_css").html();
+	//remove old canvas'
+	for(var i =1; i < canvas_count; i++){
+	$("#canvas" + i).remove();
+	}
+	canvas_count = 0;
+	//reset template
+	$(".inner_canvas").children().remove();
+	//load stuff from the template
+		$.each(template_elements,function(i,template_element){
+
+			//replace template content with personalisation
+			control_count +=1;
+			template_element.control_class = "control" + control_count;
+			merged_innerHTML = template_element.innerHTML;
+			$.each(personalised_elements,function(index,obj){
+				merged_innerHTML = merged_innerHTML.replace("{" + obj.key + "}",obj.value);
+			});	
+
+			//append the item to the generic canvas
+				$("#canvas0 .inner_canvas").append("<div class='" + template_element.control_class + "'>"+ merged_innerHTML+ "</div>");
+			$("." + template_element.control_class).css(template_element.CSS_key_pairs );
+		});	
+
+
+	//add all new canvas' based on template- ID ascends from zero.
+	for(var i=0; i < sheet_personalisations.length;i++){
+	canvas_count +=1;
+	var clone = $("#canvas0").clone();
+	clone.attr('id',"canvas" + canvas_count);
+	clone.addClass("clone");
+	clone.appendTo("body");
+	}
+
+	//somehow merge in the personalisation..
+	personalised_invitations = 0;
+	$.each(sheet_personalisations,function(i,person){
+		personalised_invitations +=1;
+			var this_sheet = $("#canvas" + personalised_invitations + " .inner_canvas");
+			this_sheet.children().each(function(){
+				var contents = $(this).html();
+				if(contents.indexOf("{" + person.key + "}") > -1){
+					$(this).html(contents.replace("{" + person.key + "}",person.value));
+				}
+				console.log($(this).attr('id'));
+			});
+	})
+
+	
+/*
+	if(canvas_id != "canvas0"){
+		relevant_sheet_personalisation = sheet_personalisations.pop;
+		merged_innerHTML = merged_innerHTML.replace("{" + relevant_sheet_personalisation.key + "}",relevant_sheet_personalisation.value);
+		current_canvas.append("<div id='" + template_element.control_id + "'>"+ merged_innerHTML+ "</div>");
+	}*/
+	
+
+}
+	var template = {};
+template.additional_css = "<link href='http://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>"; //to be inserted into page.
+template.elements = [];
+template.elements.push(new template_element("Black Background","",{	
+						"personalised_invitations":"absolute",
+						"background-color":"#000",
+						"width":"100%",
+						"left":"0%",
+						"top":"0%",
+						"height":"100%",
+							"z-index":"1"
+						}));
+template.elements.push(new template_element("White Swirly","<img src=\"Images/White-Swirl-on-Black.png\" width=100% height=100% />",{
+						"position":"absolute",
+						"left":"40%",
+						"top":"10%",
+						"height":"20%",
+						"width":"20%",
+						"z-index":"2"
+}))
+template.elements.push(new template_element("A name","<h1>Dear {person_name}</h1>",{
+							"position":"absolute",
+							"left":"10%",
+							"top":"10%",
+							"z-index":"1000",
+							"color":"#fff",
+							"font-family":"'Lora',Helvetica"
+						}));
+template.fields_required = [];
+
+	var personalised_elements= [];
+	personalised_elements.push({"key":"main_header","value":"foo bar"});
+	
+	var sheet_personalisations = [];
+	sheet_personalisations.push(	{"key":"person_name","value":"Tester"},
+					{"key":"person_name","value":"Tester2"},
+					{"key":"person_name","value":"Rhys"}
+);
+
+populate_inner_canvas(template.elements,
+											personalised_elements,
+											sheet_personalisations,
+											template.additional_css);
+
+//jquery test.
+$("body").append("<style id=\"test\">body { background-color: #000;}</style>");
+$("#test").remove();
+</script>
+
+</body>
+</html>
