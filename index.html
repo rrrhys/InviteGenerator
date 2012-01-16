@@ -32,10 +32,16 @@
 		.apply_cutline {
 		margin: 14.76px;
 		}
+		.portrait {
+			height: 738px; width: 492px;
+		}
+		.landscape {
+			height: 492px; width: 738px;
+		}
 		</style>
 	</head>
 <body bgcolor="white" text="black" style="padding: 0px; margin: 0px;">
-	<div style="height: 492px; width: 738px;" class="canvas apply_cutline" id="canvas0">
+	<div class="canvas apply_cutline portrait" id="canvas0">
 		<div class="inner_canvas"></div>
 		<div class="cutline t l"></div>
 		<div class="cutline b l"></div>
@@ -134,7 +140,7 @@ template.elements.push(new template_element("White Swirly","<img src=\"Images/Wh
 						"position":"absolute",
 						"left":"40%",
 						"top":"10%",
-						"height":"20%",
+						"height":"10%",
 						"width":"20%",
 						"z-index":"2"
 }))
@@ -146,6 +152,16 @@ template.elements.push(new template_element("A name","<h1>Dear {person_name}</h1
 							"color":"#fff",
 							"font-family":"'Lora',Helvetica"
 						}));
+template.elements.push(new template_element("Center text","<p>Some text</p>",{
+	"position": "absolute";
+	"left":"10%",
+	"width":"80%",
+	"z-index":"1000",
+	"color":"#fff",
+	"font-family":"Helvetica",
+	"top":"30%"
+
+}));
 template.fields_required = [];
 
 	var personalised_elements= [];
