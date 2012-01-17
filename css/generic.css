@@ -1,0 +1,36 @@
+
+		.apply_cutline .cutline{
+		position: absolute;
+		height: 14.76px;
+		width: 14.76px;
+		}
+		.apply_cutline .l {
+		left: -14.76px;
+		border-right: 1px solid #000;
+		}
+		.apply_cutline .t {
+		top: -14.76px;
+		border-bottom: 1px solid #000;
+		}
+		.apply_cutline .r {
+		right: -14.76px;
+		border-left: 1px solid #000;
+		}
+		.apply_cutline .b {
+		bottom: -14.76px;
+		border-top: 1px solid #000;
+		}
+		.canvas {
+		padding: 0px; 
+		position: relative;
+		background-color: #ccc;
+		}
+		.apply_cutline {
+		margin: 14.76px;
+		}
+		.portrait {
+			height: 738px; width: 492px;
+		}
+		.landscape {
+			height: 492px; width: 738px;
+		}

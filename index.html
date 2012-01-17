@@ -1,44 +1,7 @@
 <html>
 	<head>
 		<title>Welcome to nginx!</title>
-		<style>
-		/*Magic Number 4.92*/
-		.apply_cutline .cutline{
-		position: absolute;
-		height: 14.76px;
-		width: 14.76px;
-		}
-		.apply_cutline .l {
-		left: -14.76px;
-		border-right: 1px solid #000;
-		}
-		.apply_cutline .t {
-		top: -14.76px;
-		border-bottom: 1px solid #000;
-		}
-		.apply_cutline .r {
-		right: -14.76px;
-		border-left: 1px solid #000;
-		}
-		.apply_cutline .b {
-		bottom: -14.76px;
-		border-top: 1px solid #000;
-		}
-		.canvas {
-		padding: 0px; 
-		position: relative;
-		background-color: #ccc;
-		}
-		.apply_cutline {
-		margin: 14.76px;
-		}
-		.portrait {
-			height: 738px; width: 492px;
-		}
-		.landscape {
-			height: 492px; width: 738px;
-		}
-		</style>
+		<link rel="stylesheet" type="text/css" href="css/generic.css">
 	</head>
 <body bgcolor="white" text="black" style="padding: 0px; margin: 0px;">
 	<div class="canvas apply_cutline portrait" id="canvas0">
@@ -51,7 +14,7 @@
 
 <div id="additional_css"></div>
 	<script type="text/javascript" src="http://provisioning.devshopous.dev/scripts/jquery-1.4.2.js"></script>
-
+	<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
 	<script type="text/javascript">
 control_count = 0;
 canvas_count = 0;
@@ -65,8 +28,8 @@ function populate_inner_canvas(	template_elements,
 																sheet_personalisations,
 																css_additions){
 
-	$("#additional_css").append(css_additions)
-	innerhtml = $("#additional_css").html();
+	$("head").append(css_additions);
+	$("style").append(" ");
 	//remove old canvas'
 	for(var i =1; i < canvas_count; i++){
 	$("#canvas" + i).remove();
@@ -114,18 +77,10 @@ function populate_inner_canvas(	template_elements,
 			});
 	})
 
-	
-/*
-	if(canvas_id != "canvas0"){
-		relevant_sheet_personalisation = sheet_personalisations.pop;
-		merged_innerHTML = merged_innerHTML.replace("{" + relevant_sheet_personalisation.key + "}",relevant_sheet_personalisation.value);
-		current_canvas.append("<div id='" + template_element.control_id + "'>"+ merged_innerHTML+ "</div>");
-	}*/
-	
 
 }
 	var template = {};
-template.additional_css = "<link href='http://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>"; //to be inserted into page.
+template.additional_css = ""
 template.elements = [];
 template.elements.push(new template_element("Black Background","",{	
 						"personalised_invitations":"absolute",
@@ -144,28 +99,43 @@ template.elements.push(new template_element("White Swirly","<img src=\"Images/Wh
 						"width":"20%",
 						"z-index":"2"
 }))
-template.elements.push(new template_element("A name","<h1>Dear {person_name}</h1>",{
+template.elements.push(new template_element("A name","<h2 style='font-weight: normal;'>Dear {person_name}</h2>",{
 							"position":"absolute",
 							"left":"10%",
-							"top":"10%",
+							"top":"20%",
 							"z-index":"1000",
 							"color":"#fff",
-							"font-family":"'Lora',Helvetica"
+							"font-family":"Adobe Garamond Pro"
 						}));
-template.elements.push(new template_element("Center text","<p>Some text</p>",{
-	"position": "absolute";
+template.elements.push(new template_element("Wedding Names","<p style='font-size: 24pt;'><span style=\"font-family: 'ChopinScript';\">{person_1}</span><br /><span style='font-size: 14pt;font-variant: small-caps;'>and</span><br /><span style='font-family: ChopinScript'>{person_2}</span></p>",{
+							"position":"absolute",
+							"left":"30%",
+							"width":"40%",
+							"top":"30%",
+							"z-index":"1000",
+							"color":"#fff",
+							'text-align':'center',
+							'font-family':'Adobe Garamond Pro',
+
+						}));
+template.elements.push(new template_element("Center text","<p style=\"font-family: 'Adobe Garamond Pro';font-variant: small-caps;line-height: 30px;\">Request the pleasure of your company<br />at our marriage<br />{marriage_time}<br />The Regency Ballroom<br />203 South Elm Street<br />Greensboro, North Carolina<br />and afterwards at the reception.</p>",{
+	"position": "absolute",
 	"left":"10%",
 	"width":"80%",
 	"z-index":"1000",
 	"color":"#fff",
 	"font-family":"Helvetica",
-	"top":"30%"
+	"top":"45%",
+	'text-align':'center'
 
 }));
 template.fields_required = [];
 
 	var personalised_elements= [];
-	personalised_elements.push({"key":"main_header","value":"foo bar"});
+	personalised_elements.push(	{"key":"main_header","value":"foo bar"},
+															{"key":"marriage_time","value":"Thursday, the Eleventh of October <br />Two Thousand and Seven <br />at half after six o'clock"},
+															{"key":"person_1","value":"Jane Doe"},
+															{"key":"person_2","value":"Johnathan Doe"});
 	
 	var sheet_personalisations = [];
 	sheet_personalisations.push(	{"key":"person_name","value":"Tester"},
@@ -179,8 +149,8 @@ populate_inner_canvas(template.elements,
 											template.additional_css);
 
 //jquery test.
-$("body").append("<style id=\"test\">body { background-color: #000;}</style>");
-$("#test").remove();
+/*$("body").append("<style id=\"test\">body { background-color: #000;}</style>");
+$("#test").remove();*/
 </script>
 
 </body>
