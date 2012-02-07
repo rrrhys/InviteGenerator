@@ -4,6 +4,10 @@
 		<link rel="stylesheet" type="text/css" href="css/generic.css">
 	</head>
 <body bgcolor="white" text="black" style="padding: 0px; margin: 0px;">
+<textarea name="names" id="names" cols="30" rows="10">
+Tester1
+Tester2
+</textarea>
 	<div class="canvas apply_cutline portrait" id="canvas0">
 		<div class="inner_canvas"></div>
 		<div class="cutline t l"></div>
@@ -12,46 +16,41 @@
 		<div class="cutline b r"></div>
 	</div>
 
-<div id="additional_css"></div>
 	<script type="text/javascript" src="http://provisioning.devshopous.dev/scripts/jquery-1.4.2.js"></script>
 	<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
 	<script type="text/javascript">
 control_count = 0;
 canvas_count = 0;
+names = $("#names").text().split("\n");
+//alert(names[0]);
 function template_element(name, innerHTML,CSS_key_pairs){
-this.name = name;
-this.innerHTML = innerHTML;
-this.CSS_key_pairs = CSS_key_pairs;
+	this.name = name;
+	this.innerHTML = innerHTML;
+	this.CSS_key_pairs = CSS_key_pairs;
 }
-function populate_inner_canvas(	template_elements,
-																personalised_elements,
-																sheet_personalisations,
-																css_additions){
 
-	$("head").append(css_additions);
-	$("style").append(" ");
+function setup_base_template(template_base_html, personalised_elements){
+	//empty template canvas
+	$("#canvas0 .inner_canvas").children().remove();
+	//replace base HTML with personalisations
+	merged_innerHTML = template_base_html;
+	$.each(personalised_elements,function(index,obj){
+		merged_innerHTML = merged_innerHTML.replace("{" + obj.key + "}",obj.value);
+	});	
+	//drop base html into template canvas
+	$("#canvas0 .inner_canvas").append(merged_innerHTML);
+}
+
+function populate_inner_canvas(template_elements,	personalised_elements,sheet_personalisations){
 	//remove old canvas'
 	for(var i =1; i < canvas_count; i++){
 	$("#canvas" + i).remove();
 	}
 	canvas_count = 0;
 	//reset template
-	$(".inner_canvas").children().remove();
+	
 	//load stuff from the template
-		$.each(template_elements,function(i,template_element){
-
-			//replace template content with personalisation
-			control_count +=1;
-			template_element.control_class = "control" + control_count;
-			merged_innerHTML = template_element.innerHTML;
-			$.each(personalised_elements,function(index,obj){
-				merged_innerHTML = merged_innerHTML.replace("{" + obj.key + "}",obj.value);
-			});	
-
-			//append the item to the generic canvas
-				$("#canvas0 .inner_canvas").append("<div class='" + template_element.control_class + "'>"+ merged_innerHTML+ "</div>");
-			$("." + template_element.control_class).css(template_element.CSS_key_pairs );
-		});	
+		
 
 
 	//add all new canvas' based on template- ID ascends from zero.
@@ -80,61 +79,14 @@ function populate_inner_canvas(	template_elements,
 
 }
 	var template = {};
-template.additional_css = ""
 template.elements = [];
-template.elements.push(new template_element("Black Background","",{	
-						"personalised_invitations":"absolute",
-						"background-color":"#000",
-						"width":"100%",
-						"left":"0%",
-						"top":"0%",
-						"height":"100%",
-							"z-index":"1"
-						}));
-template.elements.push(new template_element("White Swirly","<img src=\"Images/White-Swirl-on-Black.png\" width=100% height=100% />",{
-						"position":"absolute",
-						"left":"40%",
-						"top":"10%",
-						"height":"10%",
-						"width":"20%",
-						"z-index":"2"
-}))
-template.elements.push(new template_element("A name","<h2 style='font-weight: normal;'>Dear {person_name}</h2>",{
-							"position":"absolute",
-							"left":"10%",
-							"top":"20%",
-							"z-index":"1000",
-							"color":"#fff",
-							"font-family":"Adobe Garamond Pro"
-						}));
-template.elements.push(new template_element("Wedding Names","<p style='font-size: 24pt;'><span style=\"font-family: 'ChopinScript';\">{person_1}</span><br /><span style='font-size: 14pt;font-variant: small-caps;'>and</span><br /><span style='font-family: ChopinScript'>{person_2}</span></p>",{
-							"position":"absolute",
-							"left":"30%",
-							"width":"40%",
-							"top":"30%",
-							"z-index":"1000",
-							"color":"#fff",
-							'text-align':'center',
-							'font-family':'Adobe Garamond Pro',
 
-						}));
-template.elements.push(new template_element("Center text","<p style=\"font-family: 'Adobe Garamond Pro';font-variant: small-caps;line-height: 30px;\">Request the pleasure of your company<br />at our marriage<br />{marriage_time}<br />The Regency Ballroom<br />203 South Elm Street<br />Greensboro, North Carolina<br />and afterwards at the reception.</p>",{
-	"position": "absolute",
-	"left":"10%",
-	"width":"80%",
-	"z-index":"1000",
-	"color":"#fff",
-	"font-family":"Helvetica",
-	"top":"45%",
-	'text-align':'center'
-
-}));
 template.fields_required = [];
 
 	var personalised_elements= [];
 	personalised_elements.push(	{"key":"main_header","value":"foo bar"},
 															{"key":"marriage_time","value":"Thursday, the Eleventh of October <br />Two Thousand and Seven <br />at half after six o'clock"},
-															{"key":"person_1","value":"Jane Doe"},
+															{"key":"person_1","value":"Jane Does"},
 															{"key":"person_2","value":"Johnathan Doe"});
 	
 	var sheet_personalisations = [];
@@ -143,14 +95,22 @@ template.fields_required = [];
 					{"key":"person_name","value":"Rhys"}
 );
 
-populate_inner_canvas(template.elements,
-											personalised_elements,
-											sheet_personalisations,
-											template.additional_css);
 
-//jquery test.
-/*$("body").append("<style id=\"test\">body { background-color: #000;}</style>");
-$("#test").remove();*/
+$.get("black_elegant.html",{},function(data){
+	template.base_html = data;
+	setup_base_template(template.base_html, personalised_elements);
+
+$.get("black_elegant_kv.json",function(data2){
+	alert(data2);
+	var dataobj = $.parseJSON(data2);
+	alert(dataobj.name);
+}).error(alert('ok'));
+//merge in dummy data
+/*	populate_inner_canvas(template.elements,
+											personalised_elements,
+											sheet_personalisations);*/
+
+});
 </script>
 
 </body>

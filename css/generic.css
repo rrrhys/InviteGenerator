@@ -25,6 +25,11 @@
 		position: relative;
 		background-color: #ccc;
 		}
+        .inner_canvas {
+        position: relative;
+        height: 100%;
+        width: 100%;
+        }
 		.apply_cutline {
 		margin: 14.76px;
 		}
