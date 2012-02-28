@@ -1,1 +1,16 @@
-{kv:{orientation:'portrait'}}
+{	"name":"Elegant Black",
+		"orientation":"portrait",
+		"fields":	[
+					{	"key":"main_header",
+						"friendly_name":"Invitation Title",
+						"value":"foo bar",
+						"fieldtype":"text"},
+					{	"key":"marriage_time","value":"Thursday, the Eleventh of October <br />Two Thousand and Seven <br />at half after six o'clock",
+						"friendly_name":"Venue and Time",
+						"fieldtype":"textarea"},
+					{"key":"person_1","value":"Jane Does","fieldtype":"text","friendly_name":"First Person Name"},
+					{"key":"person_2","value":"Johnathan Doe","fieldtype":"text","friendly_name":"Second Person Name"}]
+		}
+
+
+

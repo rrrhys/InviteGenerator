@@ -95,16 +95,23 @@ template.fields_required = [];
 					{"key":"person_name","value":"Rhys"}
 );
 
+$(function(){
+		$.ajaxSetup({
+	  error: function(xhr, status, error) {
+	    alert("An AJAX error occured: " + status + "\nError: " + error);
+	  }
+		});
+		$.get("black_elegant.html",{},function(data){
+			template.base_html = data;
+			setup_base_template(template.base_html, personalised_elements);
 
-$.get("black_elegant.html",{},function(data){
-	template.base_html = data;
-	setup_base_template(template.base_html, personalised_elements);
+		$.get("black_elegant_kv.json",{},function(data2){
+			alert(data2);
+			var dataobj = $.parseJSON(data2);
+			alert(dataobj.name);
+		}).error(alert('ok'));
+})
 
-$.get("black_elegant_kv.json",function(data2){
-	alert(data2);
-	var dataobj = $.parseJSON(data2);
-	alert(dataobj.name);
-}).error(alert('ok'));
 //merge in dummy data
 /*	populate_inner_canvas(template.elements,
 											personalised_elements,
